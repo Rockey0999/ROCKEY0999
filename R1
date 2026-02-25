@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE/NEET Commander | Study Dashboard</title>
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #6366f1; /* Indigo */
+            --secondary: #ec4899; /* Pink */
+            --accent: #8b5cf6; /* Violet */
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.2) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Smooth Transitions */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Countdown Widget */
+        .countdown-container {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+        }
+        .time-box {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            width: 22%;
+        }
+        .time-val {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .time-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* Notes Section */
+        .notes-area {
+            width: 100%;
+            height: 150px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            color: var(--text-main);
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            resize: none;
+            outline: none;
+            transition: border 0.3s;
+        }
+        .notes-area:focus {
+            border-color: var(--primary);
+        }
+        .btn {
+            margin-top: 10px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: var(--accent);
+        }
+
+        /* Analytics / Tracker */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .progress-bar-bg {
+            background: rgba(255,255,255,0.1);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        input[type="number"] {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            width: 60%;
+        }
+
+        /* Image Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .gallery-img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1><i class="fas fa-graduation-cap"></i> My Prep Dashboard</h1>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">JEE Advanced & College Entrance Tracker</p>
+        </div>
+        <div id="clock" style="text-align: right; font-family: monospace; font-size: 1.2rem;">
+            <!-- Time injected via JS -->
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        
+        <!-- 1. Countdown Timer -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="far fa-clock"></i> JEE Advanced 2025</span>
+            </div>
+            <div class="countdown-container">
+                <div class="time-box">
+                    <div class="time-val" id="days">00</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-val" id="hours">00</div>
+                    <div class="time-label">Hrs</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-val" id="minutes">00</div>
+                    <div class="time-label">Min</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-val" id="seconds">00</div>
+                    <div class="time-label">Sec</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Quick Notes -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-sticky-note"></i> Quick Notes</span>
+                <button class="btn" onclick="saveNotes()">Save</button>
+            </div>
+            <textarea id="notes" class="notes-area" placeholder="Write physics formulas, chem tricks, or daily todo..."></textarea>
+        </div>
+
+        <!-- 3. Study Statistics & Tracker -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title"><i class="fas fa-chart-line"></i> Daily Tracker</span>
+            </div>
+            
+            <div class="stat-row">
+                <span>Physics</span>
+                <span id="phy-val">0 hrs</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="phy-bar" style="width: 0%"></div>
+            </div>
+            <br>
+            <div class="stat-row">
+                <span>Chemistry</span>
+                <span id="chem-val">0 hrs</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="chem-bar" style="width: 0%"></div>
+            </div>
+            <br>
+            <div class="stat
